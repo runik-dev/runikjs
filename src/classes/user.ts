@@ -1,38 +1,31 @@
 import { request } from 'undici'
 import type { User as _User } from 'src/types/user.js'
-import Users from './users.js'
 class User {
 	private session: string
-	private client: Users
-	constructor(session: string, client: Users) {
+	private endpoint: string
+	constructor(session: string, endpoint: string) {
 		this.session = session
-		this.client = client
+		this.endpoint = endpoint
 	}
 	async get() {
-		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/me`,
-			{
-				headers: {
-					Authorization: this.session
-				}
+		const { body, statusCode } = await request(`${this.endpoint}/users/me`, {
+			headers: {
+				Authorization: this.session
 			}
-		)
+		})
 		const json = await body.json()
 		if (statusCode !== 200) throw new Error(`Runik: ${JSON.stringify(json)}`)
 		return json as _User
 	}
 	async delete(password: string) {
-		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/me`,
-			{
-				headers: {
-					Authorization: this.session,
-					'Content-type': 'application/json'
-				},
-				method: 'DELETE',
-				body: JSON.stringify({ password })
-			}
-		)
+		const { body, statusCode } = await request(`${this.endpoint}/users/me`, {
+			headers: {
+				Authorization: this.session,
+				'Content-type': 'application/json'
+			},
+			method: 'DELETE',
+			body: JSON.stringify({ password })
+		})
 		if (statusCode !== 204) {
 			const json = await body.json()
 			throw new Error(`Runik: ${JSON.stringify(json)}`)
@@ -40,7 +33,7 @@ class User {
 	}
 	async signOut() {
 		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/sessions/${this.session}`,
+			`${this.endpoint}/users/sessions/${this.session}`,
 			{
 				method: 'DELETE'
 			}
@@ -50,7 +43,7 @@ class User {
 	}
 	async getSessions() {
 		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/sessions`,
+			`${this.endpoint}/users/sessions`,
 			{
 				headers: {
 					Authorization: this.session
@@ -68,7 +61,7 @@ class User {
 	}
 	async deleteSessions(password: string) {
 		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/sessions/`,
+			`${this.endpoint}/users/sessions/`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -84,7 +77,7 @@ class User {
 	}
 	async updateEmail(email: string, url: string) {
 		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/me/email`,
+			`${this.endpoint}/users/me/email`,
 			{
 				headers: {
 					Authorization: this.session,
@@ -101,7 +94,7 @@ class User {
 	}
 	async updatePassword(oldPassword: string, newPassword: string) {
 		const { body, statusCode } = await request(
-			`${this.client.endpoint}/users/me/email`,
+			`${this.endpoint}/users/me/email`,
 			{
 				headers: {
 					Authorization: this.session,

@@ -51,7 +51,7 @@ class Users {
 		const json = (await body.json()) as Record<string, string>
 		if (json.code) throw new Error(json.code)
 		if (!json.token) throw new Error('Runik: Unexpected body')
-		return new User(json.token, this)
+		return new User(json.token, this.endpoint)
 	}
 }
 export default Users
