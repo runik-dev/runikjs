@@ -1,4 +1,4 @@
-![banner](/images/banner.png)
+![banner](https://github.com/runik-dev/runikjs/raw/main/images/banner.png)
 
 # Runik SDK
 
