@@ -12,7 +12,7 @@ const email = process.env.TEST_EMAIL ?? 'infrared.studio@skiff.com'
 const password = crypto.randomBytes(10).toString('hex')
 
 const createStart = new Date()
-const { id } = await users.create(email, password, 'http://localhost:5173')
+const { id } = await users.signUp(email, password, 'http://localhost:5173')
 const createEnd = new Date()
 console.log(id)
 

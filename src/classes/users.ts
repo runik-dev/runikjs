@@ -16,7 +16,7 @@ class Users {
 		const { body } = await request(`${this.endpoint}/users`)
 		return (await body.json()) as User[]
 	}
-	async create(email: string, password: string, url: string) {
+	async signUp(email: string, password: string, verifyUrl: string) {
 		const { body } = await request(`${this.endpoint}/users`, {
 			method: 'POST',
 			headers: {
@@ -26,7 +26,7 @@ class Users {
 			body: JSON.stringify({
 				email,
 				password,
-				url
+				verifyUrl
 			})
 		})
 		const json = (await body.json()) as Record<string, string>
