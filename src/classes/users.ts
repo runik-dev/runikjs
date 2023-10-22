@@ -30,7 +30,7 @@ class Users {
 			})
 		})
 		const json = (await body.json()) as Record<string, string>
-		if (json.code) throw new Error(json.code + '-' + json.error)
+		if (json.code) throw new Error(json.code)
 		if (!json.id) throw new Error('Runik: Unexpected body')
 		return json as { id: string }
 	}
