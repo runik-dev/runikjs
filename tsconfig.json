@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"baseUrl": ".",
+		"module": "NodeNext",
+		"lib": ["ESNext"],
+		"pretty": true,
+		"resolveJsonModule": true,
+		"emitDeclarationOnly": true,
+		"declaration": true,
+		"esModuleInterop": true,
+		"target": "ESNext",
+		"outDir": "dist",
+		"moduleResolution": "NodeNext"
+	},
+	"include": ["src/**/*"]
+}
