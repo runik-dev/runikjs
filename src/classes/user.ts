@@ -1,7 +1,7 @@
 import { request } from 'undici'
 import type { User as _User } from 'src/types/user.js'
 class User {
-	private session: string
+	session: string
 	private endpoint: string
 	constructor(session: string, endpoint: string) {
 		this.session = session
