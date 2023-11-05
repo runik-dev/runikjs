@@ -1,6 +1,6 @@
 {
 	"name": "runik",
-	"version": "0.1.5",
+	"version": "0.1.7",
 	"description": "SDK for Runik API",
 	"type": "module",
 	"main": "dist/index.js",
@@ -28,6 +28,7 @@
 		"typescript": "^5.2.2"
 	},
 	"dependencies": {
+		"js-base64": "^3.7.5",
 		"undici": "^5.26.4",
 		"zod": "^3.22.4"
 	},
