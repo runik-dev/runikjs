@@ -109,5 +109,17 @@ class User {
 			throw new Error(`Runik: ${JSON.stringify(json)}`)
 		}
 	}
+	async verifyEmail(token: string) {
+		const { body, statusCode } = await request(
+			`${this.endpoint}/users/verify/${token}`,
+			{
+				method: 'PUT'
+			}
+		)
+		if (statusCode !== 204) {
+			const json = await body.json()
+			throw new Error(`Runik: ${JSON.stringify(json)}`)
+		}
+	}
 }
 export default User
