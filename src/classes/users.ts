@@ -185,6 +185,21 @@ class Users {
 				const json = await body.json()
 				throw { code: 'runik', body: json, status: statusCode }
 			}
+		},
+		deleteAvatar: async (session: string) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/users/me/avatar`,
+				{
+					headers: {
+						Authorization: session
+					},
+					method: 'DELETE'
+				}
+			)
+			if (statusCode !== 204) {
+				const json = await body.json()
+				throw { code: 'runik', body: json, status: statusCode }
+			}
 		}
 	}
 }
