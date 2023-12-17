@@ -2,7 +2,7 @@
 
 # Runik SDK
 
-Built for Runik API v0.3.1
+Built for Runik API v0.3.2
 
 ![Lines of code](https://img.shields.io/tokei/lines/github/runik-dev/runikjs?style=flat-square&color=9360FF&label=lines%20of%20code)
 [![Discord](https://img.shields.io/discord/906313801366921286?label=discord&color=9360FF&style=flat-square)](https://discord.gg/fCTGvyNTHG)

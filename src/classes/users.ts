@@ -109,6 +109,20 @@ class Users {
 			if (statusCode !== 200)
 				throw { code: 'runik', body: json, status: statusCode }
 			return json as Project[]
+		},
+		get: async (session: string, project_id: string) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/projects/${project_id}`,
+				{
+					headers: {
+						Authorization: session
+					}
+				}
+			)
+			const json = await body.json()
+			if (statusCode !== 200)
+				throw { code: 'runik', body: json, status: statusCode }
+			return json as Project[]
 		}
 	}
 	client = {
