@@ -122,7 +122,7 @@ class Users {
 			const json = await body.json()
 			if (statusCode !== 200)
 				throw { code: 'runik', body: json, status: statusCode }
-			return json as Project[]
+			return json as Project
 		}
 	}
 	client = {
