@@ -10,8 +10,10 @@ class Users {
 	endpoint: string
 	private key: string
 	constructor(client: Client) {
-		Url.parse(client.endpoint)
-		z.string().parse(client.key)
+		const validUrl = Url.safeParse(client.endpoint)
+		if (!validUrl.success) throw {code: 'invalid_input', errors: validUrl.error.issues}
+		const validKey = z.string().safeParse(client.key)
+		if (!validKey.success) throw {code: 'invalid_input', errors: validKey.error.issues}
 		this.endpoint = client.endpoint!
 		this.key = client.key!
 	}
@@ -55,6 +57,24 @@ class Users {
 		if (json.code) throw { code: json.code, body: json }
 		if (!json.token) throw { code: 'runik_unexpected_body', body: json }
 		return new User(json.token, this.endpoint)
+	}
+	projects = {
+		createRepo: async (session: string, name: string) => {
+			const valid = z.string().min(4).max(64).safeParse(name)
+			if (!valid.success) throw {code: 'invalid_input', errors: valid.error.issues}
+			console.log(JSON.stringify({name}))
+			const { body, statusCode } = await request(`${this.endpoint}/projects`, {
+				headers: {
+					Authorization: session,
+					'Content-type': 'application/json'
+				},
+				body: JSON.stringify({name}),
+				method: "POST"
+			})
+			const json = await body.json()
+			if (statusCode !== 201) throw {code: 'runik', body: json, status: statusCode}
+			return json as {id: string}
+		}
 	}
 	client = {
 		get: async (session: string) => {
