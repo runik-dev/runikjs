@@ -2,8 +2,9 @@ import { request } from 'undici'
 import Client from './client.js'
 import { z } from 'zod'
 import User from './user.js'
-import type { User as _User } from '../types/user.js'
 import { Base64 } from 'js-base64'
+import type { User as _User } from '../types/user.js'
+import type { Project } from '../types/project.js'
 
 const Url = z.string().url()
 class Users {
@@ -11,9 +12,11 @@ class Users {
 	private key: string
 	constructor(client: Client) {
 		const validUrl = Url.safeParse(client.endpoint)
-		if (!validUrl.success) throw {code: 'invalid_input', errors: validUrl.error.issues}
+		if (!validUrl.success)
+			throw { code: 'invalid_input', errors: validUrl.error.issues }
 		const validKey = z.string().safeParse(client.key)
-		if (!validKey.success) throw {code: 'invalid_input', errors: validKey.error.issues}
+		if (!validKey.success)
+			throw { code: 'invalid_input', errors: validKey.error.issues }
 		this.endpoint = client.endpoint!
 		this.key = client.key!
 	}
@@ -61,19 +64,51 @@ class Users {
 	projects = {
 		createRepo: async (session: string, name: string) => {
 			const valid = z.string().min(4).max(64).safeParse(name)
-			if (!valid.success) throw {code: 'invalid_input', errors: valid.error.issues}
-			console.log(JSON.stringify({name}))
+			if (!valid.success)
+				throw { code: 'invalid_input', errors: valid.error.issues }
 			const { body, statusCode } = await request(`${this.endpoint}/projects`, {
 				headers: {
 					Authorization: session,
 					'Content-type': 'application/json'
 				},
-				body: JSON.stringify({name}),
-				method: "POST"
+				body: JSON.stringify({ name }),
+				method: 'POST'
 			})
 			const json = await body.json()
-			if (statusCode !== 201) throw {code: 'runik', body: json, status: statusCode}
-			return json as {id: string}
+			if (statusCode !== 201)
+				throw { code: 'runik', body: json, status: statusCode }
+			return json as { id: string }
+		},
+		updateContent: async (
+			session: string,
+			project_id: string,
+			files: Record<string, string>,
+			remove: string[]
+		) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/projects/files`,
+				{
+					headers: {
+						Authorization: session,
+						'Content-type': 'application/json'
+					},
+					body: JSON.stringify({ project_id, files, delete: remove }),
+					method: 'PATCH'
+				}
+			)
+			if (statusCode !== 200 && statusCode !== 204)
+				throw { code: 'runik', body: await body.text(), status: statusCode }
+		},
+		list: async (session: string) => {
+			const { body, statusCode } = await request(`${this.endpoint}/projects`, {
+				headers: {
+					Authorization: session
+				}
+			})
+			const json = await body.json()
+			if (statusCode !== 200)
+				throw { code: 'runik', body: json, status: statusCode }
+			return json as Project[]
 		}
 	}
 	client = {
