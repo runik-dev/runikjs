@@ -136,10 +136,10 @@ class Users {
 					body: JSON.stringify({ password })
 				}
 			)
-			const json = await body.json()
-			if (statusCode !== 204)
+			if (statusCode !== 204) {
+				const json = await body.json()
 				throw { code: 'runik', body: json, status: statusCode }
-			return json as Project
+			}
 		}
 	}
 	client = {
