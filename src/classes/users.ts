@@ -123,6 +123,22 @@ class Users {
 			if (statusCode !== 200)
 				throw { code: 'runik', body: json, status: statusCode }
 			return json as Project
+		},
+		delete: async (session: string, project_id: string, password: string) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/projects/${project_id}`,
+				{
+					headers: {
+						Authorization: session
+					},
+					method: 'DELETE',
+					body: JSON.stringify({ password })
+				}
+			)
+			const json = await body.json()
+			if (statusCode !== 204)
+				throw { code: 'runik', body: json, status: statusCode }
+			return json as Project
 		}
 	}
 	client = {
