@@ -129,7 +129,8 @@ class Users {
 				`${this.endpoint}/projects/${project_id}`,
 				{
 					headers: {
-						Authorization: session
+						Authorization: session,
+						'Content-type': 'application/json'
 					},
 					method: 'DELETE',
 					body: JSON.stringify({ password })
