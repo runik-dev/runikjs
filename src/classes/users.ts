@@ -58,7 +58,32 @@ class Users {
 		})
 		const json = (await body.json()) as Record<string, string>
 		if (json.code) throw { code: json.code, body: json }
-		if (!json.token) throw { code: 'runik_unexpected_body', body: json }
+
+		if (json.token) return new User(json.token, this.endpoint)
+		else if (json.action_name === 'totp')
+			return { action: 'totp', totpId: json.totp_id }
+
+		throw { code: 'runik_unexpected_body', body: json }
+	}
+	async totpComplete(totpId: string, totpCode: string) {
+		// 6 digit number string
+		if (totpCode.length !== 6 || !/^\d+$/.test(totpCode))
+			throw { code: 'invalid_totp_code' }
+		const { body, statusCode } = await request(
+			`${this.endpoint}/users/sessions/${totpId}?code=${totpCode}`,
+			{
+				method: 'PUT',
+				headers: {
+					Authorization: this.key
+				}
+			}
+		)
+		const json = (await body.json()) as Record<string, string>
+		if (statusCode !== 200)
+			throw {
+				code: 'runik_error',
+				body: json
+			}
 		return new User(json.token, this.endpoint)
 	}
 	projects = {
