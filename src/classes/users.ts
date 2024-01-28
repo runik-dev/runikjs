@@ -311,6 +311,23 @@ class Users {
 				const json = await body.json()
 				throw { code: 'runik', body: json, status: statusCode }
 			}
+		},
+		removeTotp: async (session: string, password: string) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/users/totp`,
+				{
+					headers: {
+						Authorization: session,
+						'Content-type': 'application/json'
+					},
+					method: 'DELETE',
+					body: JSON.stringify({ password })
+				}
+			)
+			if (statusCode !== 201) {
+				const json = await body.json()
+				throw new Error(`Runik: ${JSON.stringify(json)}`)
+			}
 		}
 	}
 	async verifyEmail(token: string) {
