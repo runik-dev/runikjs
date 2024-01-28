@@ -328,6 +328,41 @@ class Users {
 				const json = await body.json()
 				throw { code: 'runik', body: json, status: statusCode }
 			}
+		},
+		setUpTotp: async (session: string, password: string) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/users/totp`,
+				{
+					headers: {
+						Authorization: session,
+						'Content-type': 'application/json'
+					},
+					method: 'POST',
+					body: JSON.stringify({ password })
+				}
+			)
+			const json = await body.json()
+			if (statusCode !== 200) {
+				throw { code: 'runik', body: json, status: statusCode }
+			}
+			return json as { secret: string; url: string }
+		},
+		verifyTotp: async (session: string, code: string ) => {
+			const { body, statusCode } = await request(
+				`${this.endpoint}/users/totp/${code}`,
+				{
+					headers: {
+						Authorization: session,
+						'Content-type': 'application/json'
+					},
+					method: 'PUT',
+				}
+			)
+			const json = await body.json()
+			if (statusCode !== 200) {
+				throw { code: 'runik', body: json, status: statusCode }
+			}
+			return json as { valid: boolean}
 		}
 	}
 	async verifyEmail(token: string) {
