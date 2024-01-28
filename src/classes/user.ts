@@ -109,5 +109,19 @@ class User {
 			throw new Error(`Runik: ${JSON.stringify(json)}`)
 		}
 	}
+	async removeTotp(session: string, password: string) {
+		const { body, statusCode } = await request(`${this.endpoint}/users/totp`, {
+			headers: {
+				Authorization: session,
+				'Content-type': 'application/json'
+			},
+			method: 'DELETE',
+			body: JSON.stringify({ password })
+		})
+		if (statusCode !== 201) {
+			const json = await body.json()
+			throw new Error(`Runik: ${JSON.stringify(json)}`)
+		}
+	}
 }
 export default User
