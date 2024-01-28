@@ -324,9 +324,9 @@ class Users {
 					body: JSON.stringify({ password })
 				}
 			)
-			if (statusCode !== 201) {
+			if (statusCode !== 204) {
 				const json = await body.json()
-				throw new Error(`Runik: ${JSON.stringify(json)}`)
+				throw { code: 'runik', body: json, status: statusCode }
 			}
 		}
 	}
