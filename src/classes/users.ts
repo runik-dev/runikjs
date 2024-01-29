@@ -179,7 +179,6 @@ class Users {
 				throw { code: 'runik', body: json, status: statusCode }
 			return json as _User
 		},
-
 		_delete: async (password: string, session: string) => {
 			const { body, statusCode } = await request(`${this.endpoint}/users/me`, {
 				headers: {
@@ -264,14 +263,14 @@ class Users {
 			session: string
 		) => {
 			const { body, statusCode } = await request(
-				`${this.endpoint}/users/me/email`,
+				`${this.endpoint}/users/me/password`,
 				{
 					headers: {
 						Authorization: session,
 						'Content-type': 'application/json'
 					},
 					method: 'PUT',
-					body: JSON.stringify({ oldPassword, newPassword })
+					body: JSON.stringify({ old_password: oldPassword, new_password: newPassword })
 				}
 			)
 			if (statusCode !== 204) {

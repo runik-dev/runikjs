@@ -1,6 +1,6 @@
 {
 	"name": "runik",
-	"version": "0.3.14",
+	"version": "0.3.16",
 	"description": "SDK for Runik API",
 	"type": "module",
 	"main": "dist/index.js",
