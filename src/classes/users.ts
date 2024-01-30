@@ -87,7 +87,7 @@ class Users {
 		return new User(json.token, this.endpoint)
 	}
 	projects = {
-		createRepo: async (session: string, name: string) => {
+		createRepo: async (session: string, name: string, template: string) => {
 			const valid = z.string().min(4).max(64).safeParse(name)
 			if (!valid.success)
 				throw { code: 'invalid_input', errors: valid.error.issues }
@@ -96,7 +96,7 @@ class Users {
 					Authorization: session,
 					'Content-type': 'application/json'
 				},
-				body: JSON.stringify({ name }),
+				body: JSON.stringify({ name, template }),
 				method: 'POST'
 			})
 			const json = await body.json()
